@@ -15,16 +15,14 @@ def set_creds(cred_file="./../creds/spotify_creds.json"):
     os.environ["SPOTIPY_CLIENT_SECRET"] = spot_ids["client_secret"]
     os.environ["SPOTIPY_REDIRECT_URI"] = "http://localhost:8888/callback"
 
-set_creds()
 
-
-def get_user_liked_songs(limit=50):
+def get_user_liked_songs(limit=50, start_offset=0):
     scope = "user-library-read"
 
     sp = spotipy.Spotify(auth_manager=SpotifyOAuth(scope=scope))
 
     tracks = []
-    count = 0
+    count = start_offset
     repeat = True
     while repeat:
         results = sp.current_user_saved_tracks(limit=limit, offset=count)
@@ -40,14 +38,4 @@ def get_user_liked_songs(limit=50):
 
     return tracks
 
-
-def get_user_playlists():
-    scope = "user-library-read"
-
-    sp = spotipy.Spotify(auth_manager=SpotifyOAuth(scope=scope))
-
-    results = sp.current_user_playlists()
-    pprint.pprint(results)
-
-
-pprint.pprint(get_user_liked_songs())
+set_creds()
